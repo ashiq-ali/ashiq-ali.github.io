@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ashiq-ali.github.io/sitemap.xml
