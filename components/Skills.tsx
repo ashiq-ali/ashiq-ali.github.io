@@ -1,27 +1,30 @@
 'use client';
 
+import { Cpu } from 'lucide-react';
 import { skills } from '@/lib/data';
-import { Section, StatusBadge } from './Terminal';
+import { Section, Badge } from './Terminal';
 
 export function Skills() {
   return (
-    <Section id="skills" command="cat skills.json" delay={0.2}>
-      <div className="rounded-md border border-border bg-surface-2 p-4 font-mono text-sm">
-        <div className="mb-3 text-xs text-text-muted">// skills grouped by domain</div>
-        <div className="space-y-4">
-          {Object.entries(skills).map(([category, items], idx) => (
-            <div key={category}>
-              <div className="mb-1.5 text-xs text-cyan">"{category.toLowerCase().replace(/\s+/g, '_')}":</div>
-              <div className="flex flex-wrap gap-2">
-                {items.map((item) => (
-                  <StatusBadge key={item} color={idx % 2 === 0 ? 'green' : 'cyan'}>
-                    {item}
-                  </StatusBadge>
-                ))}
-              </div>
+    <Section id="skills" title="Skills" icon={<Cpu className="h-4 w-4" />} delay={0.2}>
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {Object.entries(skills).map(([category, items]) => (
+          <div
+            key={category}
+            className="rounded-xl border border-border bg-surface-2/50 p-4"
+          >
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
+              {category}
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {items.map((item) => (
+                <Badge key={item} color="muted">
+                  {item}
+                </Badge>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </Section>
   );

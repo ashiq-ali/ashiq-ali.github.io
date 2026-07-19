@@ -3,91 +3,65 @@
 import { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
-interface TerminalProps {
+interface CardProps {
   children: ReactNode;
-  title?: string;
   className?: string;
   delay?: number;
 }
 
-export function Terminal({ children, title, className = '', delay = 0 }: TerminalProps) {
+export function Card({ children, className = '', delay = 0 }: CardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.5, delay }}
-      className={`w-full overflow-hidden rounded-lg border border-border bg-surface shadow-lg ${className}`}
+      className={`w-full overflow-hidden rounded-xl border border-border bg-surface/80 backdrop-blur-sm shadow-sm ${className}`}
     >
-      <div className="flex items-center justify-between border-b border-border bg-surface-2 px-4 py-2">
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-red" />
-          <span className="h-3 w-3 rounded-full bg-amber" />
-          <span className="h-3 w-3 rounded-full bg-green" />
-        </div>
-        {title && (
-          <span className="text-xs text-text-muted font-medium">{title}</span>
-        )}
-        <div className="w-16" />
-      </div>
-      <div className="p-4 md:p-6">{children}</div>
+      {children}
     </motion.div>
-  );
-}
-
-export function Prompt({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={`flex items-start gap-2 font-mono text-sm ${className}`}>
-      <span className="shrink-0 text-green">ashiq@portfolio:~$</span>
-      <span className="text-text-primary">{children}</span>
-    </div>
-  );
-}
-
-export function CommandLine({ command, path = '~' }: { command: string; path?: string }) {
-  return (
-    <div className="mb-4 flex items-start gap-2 font-mono text-sm">
-      <span className="shrink-0 text-green">
-        ashiq@portfolio:<span className="text-cyan">{path}</span>$
-      </span>
-      <span className="text-text-primary">{command}</span>
-    </div>
   );
 }
 
 export function Section({
   id,
   title,
-  command,
   children,
   delay = 0,
+  icon,
 }: {
   id: string;
-  title?: string;
-  command: string;
+  title: string;
   children: ReactNode;
   delay?: number;
+  icon?: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-8 py-10">
-      <Terminal title={title} delay={delay}>
-        <CommandLine command={command} />
-        <div className="mt-2">{children}</div>
-      </Terminal>
+    <section id={id} className="scroll-mt-8 py-12">
+      <Card delay={delay}>
+        <div className="border-b border-border bg-surface-2/50 px-5 py-3 sm:px-6">
+          <h2 className="flex items-center gap-2 text-sm font-semibold tracking-wide text-text-secondary uppercase">
+            {icon && <span className="text-accent">{icon}</span>}
+            {title}
+          </h2>
+        </div>
+        <div className="p-5 sm:p-6">{children}</div>
+      </Card>
     </section>
   );
 }
 
-export function StatusBadge({ children, color = 'green' }: { children: ReactNode; color?: 'green' | 'cyan' | 'amber' }) {
+export function Badge({ children, color = 'accent' }: { children: ReactNode; color?: 'accent' | 'success' | 'warning' | 'muted' }) {
   const colorClass = {
-    green: 'bg-green/10 text-green border-green/20',
-    cyan: 'bg-cyan/10 text-cyan border-cyan/20',
-    amber: 'bg-amber/10 text-amber border-amber/20',
+    accent: 'bg-accent/10 text-accent-light border-accent/20',
+    success: 'bg-success/10 text-success border-success/20',
+    warning: 'bg-warning/10 text-warning border-warning/20',
+    muted: 'bg-surface-3 text-text-secondary border-border',
   }[color];
 
   return (
     <span
-      className={`inline-flex items-center rounded border px-2 py-0.5 text-xs font-medium ${colorClass}`}
+      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${colorClass}`}
     >
       {children}
     </span>
@@ -100,7 +74,7 @@ export function Link({ href, children, external = true }: { href: string; childr
       href={href}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
-      className="link-hover text-green transition-colors hover:text-green/80"
+      className="link-hover text-accent-light transition-colors hover:text-accent"
     >
       {children}
     </a>
